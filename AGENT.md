@@ -1,0 +1,11 @@
+# Yuki-chan AI (Telegram bot)
+- Entry: index.js (Telegraf polling, dotenv). Startup: npm start (node index.js).
+- Urutan modul di index.js: menu, quiz, games, ai.
+- modules/ai.js: handler teks, foto, menu buttons, session history per user. handleText() memanggil routeMessage (AI pemilah maksud) lalu mengirim ke: startTTT (ttt), sendQuiz (quiz), resolveAnswer (answer/give_up), atau replyWithAI (chat). Semua jalan di background.
+- lib/gemini.js: generate() chat, generateQuiz() soal JSON, routeMessage(text, quizInfo) -> {intent, verdict}. Model gemini-3.5-flash-lite, timeout 60 detik, retry 503/429.
+- modules/quiz.js: /quiz, soal Gemini (fallback statis). Pilihan ganda tombol A-D (quiz:opt:i), quiz:next. Export: sendQuiz, openQuizFor, describe, resolveAnswer. Kuis terbuka menerima jawaban 5 menit.
+- modules/games.js: Tic Tac Toe (startTTT, export). Trigger chat sekarang lewat routeMessage di ai.js, bukan regex.
+- Model lain: gemini-3.8-flash kena 429; gemini-2.5-* 404.
+- Env: BOT_TOKEN, GEMINI_API_KEY in .env.
+- Multi user: session per user id; grup butuh privacy mode mati di BotFather.
+- Error 409 Conflict = ada instance lain dengan token sama.
